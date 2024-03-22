@@ -1,0 +1,43 @@
+<html>
+  <link rel="stylesheet" href="static\form.css">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Heart Attack Risk</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+  <h1 id="">Sleep Disorder Risk Calculator</h1>
+    </div>
+</header>
+    <form method="POST" action="/srisk">
+    <p>Age</p>
+    <input type='text' name="age" size="20" value="{{ request.form['age'] }}"></br>
+    <p>Systolic Pressure</p>
+    <input type='text' size="20" name="sys" value="{{ request.form['sys'] }}"></br>
+    <p>Diastolic Pressure</p>
+    <input type='text' size="20" name="dia" value="{{ request.form['dia'] }}"></br>
+    <p>Quality of Sleep</p>
+    <input type='text' size="20" name="slep" value="{{ request.form['slep'] }}"></br>
+    <p>Physical Activity Level</p>
+    <input type='text' size="20" name="phys" value="{{ request.form['phys'] }}"></br>
+    <p>Heart Rate</p>
+    <input type='text' size="20" name="rate" value="{{ request.form['rate'] }}"></br> 
+    <p>Daily Steps</p>
+    <input type='text' size="20" name="step" value="{{ request.form['step'] }}"></br>
+
+    </br>
+    <button type="text">Submit</button>
+
+    </br>
+    </form>
+
+    {% if risk %}
+    <h5>{{risk}}</h5>
+    {% endif %}
+
+    <a href = "\">Home Page</a>
+</body>
+</html>

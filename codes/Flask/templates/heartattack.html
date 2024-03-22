@@ -1,0 +1,72 @@
+<html>
+  <link rel="stylesheet" href="static\form.css">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Heart Attack Risk</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+  <h1 id="">Heart Attack Risk Calculator</h1>
+    </div>
+</header>
+    <form method="POST" action="/hrisk">
+    <p>Age</p>
+    <input type='text' name="age" size="20" value="{{ request.form['age'] }}"></br>
+    <p>Gender</p>
+    <input type='text' name="gender" size="20" value="{{ request.form['gender'] }}"></br>
+    <p>Resting Blood Pressure</p>
+    <input type='text' size="20" name="rbp" value="{{ request.form['rbp'] }}"></br>
+    <p>Serum Cholestorol in mg/dl</p>
+    <input type='text' size="20" name="chol" value="{{ request.form['chol'] }}"></br>
+    <p>Fasting Blood Sugar</p>
+    <input type='text' size="20" name="fbs" value="{{ request.form['fbs'] }}"></br>
+    <p>Resting ECG Results</p>
+    <input type='text' size="20" name="ecg" value="{{ request.form['ecg'] }}"></br>
+    <p>Maximum Heart Rate Achieved</p>
+    <input type='text' size="20" name="rate" value="{{ request.form['rate'] }}"></br>
+    <p>Exercise Induced Angina</p>
+    <input type='text' size="20" name="ang" value="{{ request.form['ang'] }}"></br> 
+    <p>Thalassemia</p>
+    <input type='text' size="20" name="thal" value="{{ request.form['thal'] }}"></br>
+    </br>
+    <button type="text">Submit</button>
+
+    </br>
+    </form>
+
+    {% if risk %}
+    <h5>{{risk}}</h5>
+    {% endif %}
+
+    <a href = "\">Home Page</a>
+  <!-- <script> 
+    function update() { 
+        var age = document.getElementById('age').value;
+        var gender = document.getElementById('gender').value; 
+        var rbp = document.getElementById('rbp').value; 
+        var chol = document.getElementById('chol').value; 
+        var fbs = document.getElementById('fbs').value; 
+        var ecg = document.getElementById('ecg').value; 
+        var rate = document.getElementById('rate').value; 
+        var ang = document.getElementById('ang').value; 
+        var thal = document.getElementById('thal').value;
+        $.ajax({ 
+            url: '/process', 
+            type: 'POST', 
+            contentType: 'application/json', 
+            data: JSON.stringify({ 'list': [age,gender,rbp,chol,fbs,ecg,rate,ang,thal] }), 
+            success: function(response) { 
+                document.getElementById('output').innerHTML = response.risk;
+            }, 
+            error: function(error) { 
+                console.log(error); 
+            } 
+        }); 
+    } 
+</script>  -->
+
+</body>
+</html>
