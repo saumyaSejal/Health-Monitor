@@ -1,7 +1,5 @@
 import os
 import pathlib
-import json
-import requests
 from flask import Flask, session, abort, redirect, request, render_template
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
@@ -9,21 +7,21 @@ from pip._vendor import cachecontrol
 import google.auth.transport.requests
 import numpy as np
 import pickle
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
 import time
 import requests
 import datetime
 from datetime import date
-import sklearn
 
+#Function to get age from birthday
 def calculate_age(born):
     today = date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
+#Function to get current time in milliseconds
 def current_milli_time():
     return round(time.time() * 1000)
 
+#Function to check if user is logged in
 def login_is_required(function):
     def wrapper(*args, **kwargs):
         if "google_id" not in session:
@@ -32,6 +30,7 @@ def login_is_required(function):
             return function()
     return wrapper
 
+#Function to get user data according to the datatype
 def get_user_data(access_token, data_type_name, start_time_millis, end_time_millis):
     headers = {'Authorization': f'Bearer {access_token}'}
     request_body = {
@@ -47,12 +46,14 @@ def get_user_data(access_token, data_type_name, start_time_millis, end_time_mill
     return user_data
 
 
+#Function to get gender and birthday
 def get_age_gender(access_token):
     personData = requests.get("https://people.googleapis.com/v1/people/me?personFields=genders,birthdays",
                               headers={'Authorization': f'Bearer {access_token}'})
     user_data = personData.json()
     return user_data
 
+#Function to get sleep data
 def get_sleep_data(access_token, start_time_millis, end_time_millis):
     headers = {'Authorization': f'Bearer {access_token}'}
 
@@ -89,23 +90,19 @@ flow = Flow.from_client_secrets_file(
 
 app = Flask(__name__)
 app.secret_key = "hjl32jk34*i2k!0_7891"
+root = os.path.dirname(__file__)
 
-with open('Flask Integration\models\ensemble_heart.pickle', 'rb') as f:
-    # Load the object from the file
+#Open pickle files and load them 
+with open(root+'\models\ensemble_heart.pickle', 'rb') as f:
     ensem = pickle.load(f)
 
-with open('Flask Integration\models\standardScaler.pickle', 'rb') as f:
-    # Load the object from the file
+with open(root+'\models\standardScaler.pickle', 'rb') as f:
     std = pickle.load(f)
 
-# Open the file in binary read mode
-with open('Flask Integration\models\Scale_sleep2.pickle', 'rb') as f:
-    # Load the object from the file
+with open(root+'\models\Scale_sleep2.pickle', 'rb') as f:
     scl_sleep = pickle.load(f)
 
-# Open the file in binary read mode
-with open('Flask Integration\models\ensemble_sleep2.pickle2', 'rb') as f:
-    # Load the object from the file
+with open(root+'\models\ensemble_sleep2.pickle2', 'rb') as f:
     ensem_sleep = pickle.load(f)
 
 
@@ -119,9 +116,6 @@ def predict_disease(input_data, std_scale, model):
     prediction = model.predict(scaled_data)
     return prediction
 
-risk = ""
-input_data = tuple()
-
 @app.route('/')
 def landing():
    return render_template('login.html')
@@ -132,6 +126,7 @@ def login():
     session["state"] = state
     return redirect(authorization_url)
 
+#Callback function
 @app.route("/callback")
 def callback():
     flow.fetch_token(authorization_response=request.url)
@@ -167,21 +162,7 @@ def logout():
 @app.route('/data')
 # @login_is_required
 def data_acq():
-    name  = ""
-    if session['name']:
-        name = session['name']
     access_token = session.get("google_access_token")
-    # if credentials_json:
-    #     credentials = Credentials.from_json(credentials_json)
-    #     access_token = credentials.token
-    #     user_data = get_user_data(access_token)
-    #     # Process user data as needed
-    #     # For example:
-    #     # user_steps = user_data.get('some_key')
-    #     # user_calories = user_data.get('some_other_key')
-    #     # Pass the processed data to the template
-    #     print(user_data)
-    #     return render_template('homepage.html', name=name, user_data=user_data)
 
     sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000
     startTimeMillis = current_milli_time() - sevenDaysInMillis
@@ -194,16 +175,13 @@ def data_acq():
     session['diastolic'] = ""
     session['sleep_hours'] = ""
 
+    #check if logged in
     if access_token:
         age_gender = get_age_gender(access_token)
         birthday = datetime.date(age_gender['birthdays'][0]['date']['year'],age_gender['birthdays'][0]['date']['month'],age_gender['birthdays'][0]['date']['day'])
         age = calculate_age(birthday)
         gender = age_gender['genders'][0]['value']
-        gen = ""
-        if gender == "male":
-            gen = 1
-        else:
-            gen = 0
+
         session['age'] = age
         session['gender'] = gender
 
@@ -212,6 +190,7 @@ def data_acq():
         bp_data = get_user_data(access_token, 'com.google.blood_pressure', startTimeMillis, endTimeMillis)
         sleep_data = get_sleep_data(access_token, startTimeMillis, endTimeMillis)
         
+        #Check if user has the respective data
         if steps_data:
             steps = []
             avg_steps = 0
