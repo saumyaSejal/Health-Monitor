@@ -1,0 +1,71 @@
+<html>
+  <link rel="stylesheet" href="static\homepage.css">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Sleep Disorder Risk</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+  <h1 id="">Sleep Disorder Risk Calculator</h1>
+    </div>
+</header>
+    <form method="POST" action="/srisk">
+    <p>Gender</p>
+    <select name = "gender" id="gender" value="{{ request.form['gender'] }}{{gender}}" required>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select></br>
+    <p>Age</p>
+    <input type='text' name="age" size="20" value="{{ request.form['age'] }}{{age}}" required></br>
+    <p>Occupation</p>
+    <select name = "occupation" id="occupation" value="{{ request.form['occupation'] }}">
+      <option value="0">Accountant</option>
+      <option value="1">Doctor</option>
+      <option value="2">Engineer</option>
+      <option value="3">Lawyer</option>
+      <option value="4">Manager</option>
+      <option value="5">Nurse</option>
+      <option value="6">Software Engineer</option>
+      <option value="7">Sales Representative</option>
+      <option value="8">Scientist</option>
+      <option value="9">Salesperson</option>
+      <option value="10">Teacher</option>
+      <option value="11">Other</option>
+    </select>
+    <p>Sleep Duration</p>
+    <input type='text' size="20" name="sleepdura" value="{{ request.form['sleepdura'] }}{{sleepdura}}" required></br>
+    <p>Physical Activity Level (in minutes)</p>
+    <input type='text' size="20" name="phys" value="{{ request.form['phys'] }}" required></br>
+    <p>Stress Level (1-10)</p>
+    <input type='text' size="20" name="stress" value="{{ request.form['stress'] }}" required></br>
+    <p>BMI</p>
+    <select name = "bmi" id="bmi" value="{{ request.form['bmi'] }}" required>
+      <option value="0">Normal</option>
+      <option value="1">Overweight</option>
+      <option value="2">Obese</option>
+    </select>
+    </br>
+    <p>Heart Rate</p>
+    <input type='text' size="20" name="rate" value="{{ request.form['rate'] }}{{rate}}" required></br> 
+    <p>Daily Steps</p>
+    <input type='text' size="20" name="step" value="{{ request.form['step'] }}{{steps}}" required></br>
+    <p>Systolic Pressure</p>
+    <input type='text' size="20" name="sys" value="{{ request.form['sys'] }}{{systolic}}" required></br>
+    <p>Diastolic Pressure</p>
+    <input type='text' size="20" name="dia" value="{{ request.form['dia'] }}{{diastolic}}" required></br>
+    </br>
+    <button class="button-36" type="text">Submit</button>
+
+    </br>
+    </form>
+
+    {% if risk %}
+    <h3>{{risk}}</h3>
+    {% endif %}
+
+    <a href = "\homepage">Home Page</a>
+</body>
+</html>
