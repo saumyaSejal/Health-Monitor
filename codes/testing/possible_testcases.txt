@@ -1,0 +1,60 @@
+Based on the provided Flask application code, here are some possible unit test cases:
+
+1. **Test Landing Page**
+   - Test that the landing page (`/`) renders correctly.
+   - Test that the correct template (`login.html`) is used.
+
+2. **Test Login Route**
+   - Test that the `/login` route redirects to the Google OAuth2 authorization URL.
+   - Test that the state parameter is stored in the session.
+
+3. **Test Callback Route**
+   - Test that the `/callback` route handles the correct state parameter.
+   - Test that the user's Google ID, name, profile picture, and credentials are stored in the session.
+   - Test that the route redirects to `/data` after successful authentication.
+
+4. **Test Logout Route**
+   - Test that the `/logout` route clears the session and redirects to the landing page.
+
+5. **Test Data Acquisition**
+   - Test that the `/data` route retrieves and processes user data correctly (e.g., steps, heart rate, blood pressure, sleep).
+   - Test that the session variables (e.g., `age`, `gender`, `avgsteps`, `max_heart`, etc.) are set correctly.
+   - Test that the route redirects to `/homepage` after successful data acquisition.
+
+6. **Test Homepage Route**
+   - Test that the `/homepage` route renders the correct template (`homepage.html`).
+   - Test that the user's name and profile picture are displayed correctly if the user is authenticated.
+
+7. **Test Heart Disease Risk Route**
+   - Test that the `/heart` route renders the correct template (`heartattack.html`).
+   - Test that the user's age, gender, blood pressure, and heart rate are displayed correctly if the user is authenticated.
+
+8. **Test Heart Disease Risk Prediction**
+   - Test the `/hrisk` route with various input data scenarios.
+   - Test that the heart disease risk prediction is correct for different input combinations.
+   - Test that the correct risk message is displayed in the template.
+
+9. **Test Sleep Disorder Risk Route**
+   - Test that the `/sleep` route renders the correct template (`sleepdisorder.html`).
+   - Test that the user's age, systolic blood pressure, diastolic blood pressure, steps, heart rate, and sleep duration are displayed correctly if the user is authenticated.
+
+10. **Test Sleep Disorder Risk Prediction**
+    - Test the `/srisk` route with various input data scenarios.
+    - Test that the sleep disorder risk prediction is correct for different input combinations.
+    - Test that the correct risk message is displayed in the template.
+
+11. **Test Helper Functions**
+    - Test the `calculate_age` function with different birthdays and expected age values.
+    - Test the `current_milli_time` function to ensure it returns a reasonable value.
+    - Test the `login_is_required` decorator to ensure it aborts with a 401 status code when the user is not logged in.
+    - Test the `get_user_data` function with mock responses from the Google Fitness API.
+    - Test the `get_age_gender` function with mock responses from the Google People API.
+    - Test the `get_sleep_data` function with mock responses from the Google Fitness API.
+
+12. **Test Model Loading**
+    - Test that the pickle files for the models (`ensemble_heart.pickle`, `standardScaler.pickle`, `Scale_sleep2.pickle`, `ensemble_sleep2.pickle2`) are loaded correctly.
+
+13. **Test Prediction Function**
+    - Test the `predict_disease` function with known input data and expected output values for both heart disease and sleep disorder predictions.
+
+These are just some examples of possible unit test cases. Depending on the specific requirements and edge cases of your application, you may need to add more test cases or modify these to better suit your needs.
